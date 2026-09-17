@@ -1,23 +1,68 @@
 # 🌙 Persona 3 Portfolio | Lucas Melaré
 
-Bem-vindo à *Dark Hour*. Este é o meu portfólio web pessoal construído com **React** e **Framer Motion**, fortemente inspirado na icônica e estilosa interface (UI/UX) do jogo *Persona 3*. 
+Bem-vindo à *Dark Hour*. Este é o meu portfólio web pessoal, construído com **React** e
+**Framer Motion**, fortemente inspirado na interface do jogo *Persona 3*.
 
-A ideia deste projeto foi transformar um currículo tradicional em uma experiência imersiva e gamificada, demonstrando habilidades de Front-end, controle de estado e animações complexas.
+A ideia é transformar um currículo tradicional em uma experiência navegável como um menu de
+RPG — **STATUS**, **SKILLS**, **QUESTS** e **SYSTEM** — mantendo o conteúdo em dia com o
+currículo em PDF.
 
-## 🎮 Funcionalidades (Features)
+🔗 **Online:** [p3-portifolio.vercel.app](https://p3-portifolio.vercel.app)
 
-- **Title Screen Interativa:** Tela de início com a clássica ambientação da Gekkoukan High School e botão de "Press Start" pulsante.
-- **Menu Dinâmico (HUD):** Navegação fluida através de um menu lateral inclinado e estilizado nas sessões `STATUS`, `SKILLS`, `QUESTS` e `SYSTEM`.
-- **Animações Avançadas:** Transições de tela em "cascata" (*staggerChildren*), efeito *glassmorphism* (vidro translúcido) e layouts modulares usando a biblioteca Framer Motion.
-- **Audio Feedback (SFX):** Integração com a API nativa de Áudio do navegador para efeitos sonoros ao passar o mouse (hover) e confirmar ações (click), garantindo a sensação tátil de um jogo.
-- **Estilização Customizada:** Custom scrollbar em azul neon, uso da fonte *pixel art* "BM Space" e design 100% responsivo para a temática do jogo.
+## 🎮 Funcionalidades
 
-## 🛠️ Tecnologias Utilizadas (Tech Stack)
+- **Title screen interativa** — clique ou qualquer tecla entram na Dark Hour.
+- **Menu HUD inclinado** com navegação por mouse **e** por teclado (`↑` `↓`, `Enter`, `Esc`).
+- **Bilíngue (PT/EN)** — o idioma segue o do navegador, pode ser trocado no HUD e fica salvo.
+  Cada idioma oferece o currículo correspondente para download.
+- **SFX sintetizados na Web Audio API** — hover, confirmar, cancelar e abertura são gerados
+  em tempo real por osciladores, sem nenhum arquivo de áudio no repositório.
+- **Ambiente da Dark Hour** — drone opcional de fundo, ligado/desligado pelo HUD.
+- **Relógio do HUD** com data e hora reais; entre 00h e 01h ele vira *Dark Hour*.
+- **Animações em cascata** (*staggerChildren*), *glassmorphism* e transições de painel, com
+  respeito a `prefers-reduced-motion`.
+- **Responsivo** de 320px a desktop, com layout controlado por CSS (media queries), não por
+  medição de janela em JavaScript.
 
-- [React.js](https://react.dev/) (via [Vite](https://vitejs.dev/))
-- [Framer Motion](https://www.framer.com/motion/) (Controle de animações de interface)
-- HTML5 & CSS3 Puro (Estilização global e barra de rolagem)
-- JavaScript (ES6+)
+## 🛠️ Tecnologias
+
+- [React 19](https://react.dev/) via [Vite 7](https://vitejs.dev/)
+- [Framer Motion](https://www.framer.com/motion/) — animações de interface
 - [React Icons](https://react-icons.github.io/react-icons/)
+- CSS puro com *custom properties* e Web Audio API
+- ESLint (flat config) com os plugins de React e React Hooks
 
+## 📁 Estrutura
 
+```
+src/
+├─ App.jsx                 # orquestra estado, idioma, áudio e transições
+├─ index.css               # tokens de design, layout responsivo e temas
+├─ data/content.js         # TODO o conteúdo (PT/EN) — atualize aqui ao mudar o currículo
+├─ lib/audio.js            # motor de SFX e ambiente (Web Audio API)
+├─ hooks/useMediaQuery.js  # breakpoint e prefers-reduced-motion
+└─ components/
+   ├─ TitleScreen.jsx
+   ├─ Menu.jsx
+   ├─ Hud.jsx              # relógio + idioma + som + ambiente
+   ├─ ContentPanel.jsx
+   └─ sections/            # STATUS · SKILLS · QUESTS · SYSTEM
+```
+
+## 🚀 Rodando localmente
+
+```bash
+npm install
+npm run dev      # servidor de desenvolvimento
+npm run lint     # ESLint
+npm run build    # build de produção em dist/
+npm run preview  # serve o build de produção
+```
+
+## ✍️ Atualizando o conteúdo
+
+1. Troque os PDFs em [`public/`](public/) (`curriculo-lucas-melare-pt.pdf` e
+   `resume-lucas-melare-en.pdf`).
+2. Ajuste os textos em [`src/data/content.js`](src/data/content.js), nos dois idiomas.
+
+Nenhum componente precisa ser tocado: todo o conteúdo vem desse arquivo.

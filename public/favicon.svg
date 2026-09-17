@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Lucas Melare portfolio">
+  <rect width="64" height="64" rx="10" fill="#050A1F"/>
+  <circle cx="40" cy="22" r="13" fill="#E0F7FA"/>
+  <circle cx="34" cy="19" r="12" fill="#050A1F"/>
+  <path d="M14 52 L26 14 L34 14 L22 52 Z" fill="#00BFFF"/>
+  <path d="M30 52 L42 52 L46 40 L34 40 Z" fill="#00BFFF" opacity=".55"/>
+</svg>
