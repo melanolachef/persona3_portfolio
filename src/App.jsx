@@ -1,20 +1,24 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import TitleScreen from './components/TitleScreen';
+import Backdrop from './components/Backdrop';
 import Menu from './components/Menu';
 import Hud from './components/Hud';
 import ContentPanel from './components/ContentPanel';
 import { CONTENT } from './data/content';
 import { useIsMobile, usePrefersReducedMotion } from './hooks/useMediaQuery';
+import { useNow } from './hooks/useNow';
 import {
-  isMuted,
+  isBgmOn,
+  isSeOn,
   playCancel,
   playConfirm,
   playHover,
   playStart,
-  startAmbience,
-  stopAmbience,
-  toggleMuted,
+  setBgmOn,
+  setSeOn,
+  startBgm,
+  stopBgm,
 } from './lib/audio';
 
 const LANG_KEY = 'p3-portfolio:lang';
@@ -37,11 +41,13 @@ export default function App() {
   const [gameStarted, setGameStarted] = useState(false);
   const [activeSection, setActiveSection] = useState(null);
   const [lang, setLang] = useState(initialLang);
-  const [muted, setMuted] = useState(isMuted);
-  const [ambience, setAmbience] = useState(false);
+  const [se, setSe] = useState(isSeOn);
+  const [bgm, setBgm] = useState(isBgmOn);
 
   const isMobile = useIsMobile();
   const reducedMotion = usePrefersReducedMotion();
+  const now = useNow();
+  const isDarkHour = now.getHours() === 0;
   const copy = CONTENT[lang];
 
   // Mantém o idioma do documento coerente com o conteúdo, para leitores de tela
@@ -55,7 +61,7 @@ export default function App() {
     }
   }, [lang, copy.htmlLang]);
 
-  // Os SFX só valem no desktop: no touch, "hover" dispara junto do toque e o som sai dobrado.
+  // Os SFX de hover só valem no desktop: no touch, "hover" dispara junto do toque.
   const sfx = useMemo(() => ({
     hover: isMobile ? noop : playHover,
     confirm: playConfirm,
@@ -65,6 +71,8 @@ export default function App() {
   const start = useCallback(() => {
     setGameStarted(true);
     playStart();
+    // A música entra depois do arpejo de abertura, como a BGM do menu no jogo.
+    setTimeout(startBgm, 700);
   }, []);
 
   // O clique da title screen é o gesto que libera o áudio; qualquer tecla também começa.
@@ -72,14 +80,15 @@ export default function App() {
     if (gameStarted) return;
     const handleKeyDown = (event) => {
       if (event.key === 'Enter' || event.key === ' ' || event.key === 'Spacebar') return; // o <button> já trata
+      if (event.key === 'Tab' || event.metaKey || event.ctrlKey || event.altKey) return;
       start();
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [gameStarted, start]);
 
-  // Para o drone ao desmontar, para não deixar áudio tocando em hot reload.
-  useEffect(() => stopAmbience, []);
+  // Para a música ao desmontar, para não deixar áudio tocando em hot reload.
+  useEffect(() => stopBgm, []);
 
   const handleSelect = useCallback((id) => {
     setActiveSection(id);
@@ -93,43 +102,31 @@ export default function App() {
     });
   }, []);
 
-  const handleToggleMuted = useCallback(() => {
-    const next = toggleMuted();
-    setMuted(next);
-    if (next) setAmbience(false);
-    else playConfirm();
-  }, []);
-
-  const handleToggleAmbience = useCallback(() => {
-    setAmbience((current) => {
-      if (current) {
-        stopAmbience();
-        return false;
-      }
-      startAmbience();
-      return true;
-    });
-    playConfirm();
-  }, []);
-
-  const handleToggleLang = useCallback(() => {
-    setLang((current) => (current === 'pt' ? 'en' : 'pt'));
-    playConfirm();
-  }, []);
+  const settings = useMemo(() => ({
+    lang,
+    se,
+    bgm,
+    toggleLang: () => {
+      setLang((current) => (current === 'pt' ? 'en' : 'pt'));
+      playConfirm();
+    },
+    toggleSe: () => {
+      const next = !se;
+      setSeOn(next);
+      setSe(next);
+      if (next) playConfirm();
+    },
+    toggleBgm: () => {
+      const next = !bgm;
+      setBgmOn(next);
+      setBgm(next);
+      playConfirm();
+    },
+  }), [lang, se, bgm]);
 
   return (
-    <div className="app">
-      <div className="backdrop-grid" aria-hidden="true" />
-
-      {gameStarted && (
-        <motion.div
-          className="moon"
-          aria-hidden="true"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 0.85 }}
-          transition={{ duration: 2 }}
-        />
-      )}
+    <div className={`app${isDarkHour ? ' app--dark-hour' : ''}`}>
+      <Backdrop started={gameStarted} reducedMotion={reducedMotion} />
 
       <AnimatePresence mode="wait">
         {!gameStarted ? (
@@ -142,21 +139,12 @@ export default function App() {
         ) : (
           <motion.div
             key="layout"
-            className="layout"
+            className={`layout${activeSection ? ' layout--open' : ''}`}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ duration: 0.8 }}
+            transition={{ duration: 0.4, delay: reducedMotion ? 0 : 0.25 }}
           >
-            <Hud
-              copy={copy}
-              lang={lang}
-              onToggleLang={handleToggleLang}
-              muted={muted}
-              onToggleMuted={handleToggleMuted}
-              ambience={ambience}
-              onToggleAmbience={handleToggleAmbience}
-              onHover={sfx.hover}
-            />
+            <Hud copy={copy} now={now} lang={lang} settings={settings} onHover={sfx.hover} />
 
             {/* No celular o painel ocupa a tela inteira, então o menu sai de cena. */}
             {(!isMobile || !activeSection) && (
@@ -165,27 +153,38 @@ export default function App() {
                 activeSection={activeSection}
                 onSelect={handleSelect}
                 onHover={sfx.hover}
+                reducedMotion={reducedMotion}
               />
             )}
 
-            {activeSection && (
-              <div className="content-pane">
-                <AnimatePresence mode="wait">
-                  <ContentPanel
-                    key={activeSection}
-                    section={activeSection}
-                    copy={copy}
-                    isMobile={isMobile}
-                    reducedMotion={reducedMotion}
-                    sfx={sfx}
-                    onBack={handleBack}
-                  />
-                </AnimatePresence>
-              </div>
-            )}
+            <AnimatePresence mode="wait">
+              {activeSection && (
+                <ContentPanel
+                  key={activeSection}
+                  section={activeSection}
+                  copy={copy}
+                  isMobile={isMobile}
+                  reducedMotion={reducedMotion}
+                  sfx={sfx}
+                  settings={settings}
+                  onBack={handleBack}
+                />
+              )}
+            </AnimatePresence>
           </motion.div>
         )}
       </AnimatePresence>
+
+      {/* Faixa diagonal que varre a tela ao entrar no menu, como a transição do jogo. */}
+      {gameStarted && !reducedMotion && (
+        <motion.div
+          className="wipe"
+          aria-hidden="true"
+          initial={{ x: '-130%' }}
+          animate={{ x: '130%' }}
+          transition={{ duration: 0.75, ease: [0.7, 0, 0.3, 1] }}
+        />
+      )}
 
       <div className="backdrop-vignette" aria-hidden="true" />
     </div>

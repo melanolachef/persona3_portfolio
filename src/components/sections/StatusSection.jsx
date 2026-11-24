@@ -1,13 +1,20 @@
-/** Aba STATUS: ficha do "personagem" — cargo atual, histórico e formação. */
+import ArcanaCard from '../ArcanaCard';
+
+/** Aba STATS: ficha do "personagem" — cargo atual, histórico e formação. */
 export default function StatusSection({ copy }) {
   const s = copy.status;
+  const lang = copy.htmlLang === 'en' ? 'en' : 'pt';
 
   return (
     <div className="scroll-area">
-      <header>
-        <h3 className="status__name">{s.name}</h3>
-        <p className="status__class">{s.class}</p>
-        <p className="status__location">{s.location}</p>
+      <header className="status__header">
+        <ArcanaCard arcana={s.arcana} lang={lang} />
+        <div>
+          <p className="status__note">{s.arcanaNote}</p>
+          <h3 className="status__name">{s.name}</h3>
+          <p className="status__class">{s.class}</p>
+          <p className="status__location">{s.location}</p>
+        </div>
       </header>
 
       <p className="status__bio">{s.bio}</p>
@@ -28,7 +35,7 @@ export default function StatusSection({ copy }) {
         <h4 className="section-label">{s.historyLabel}</h4>
         <div className="stack">
           {s.history.map((job) => (
-            <div key={`${job.org}-${job.role}`}>
+            <div key={`${job.org}-${job.role}`} className="row">
               <div className="entry">
                 <span className="entry__primary">{job.org}</span>
                 <span className="entry__meta">{job.period}</span>
@@ -43,7 +50,7 @@ export default function StatusSection({ copy }) {
         <h4 className="section-label">{s.academicsLabel}</h4>
         <div className="stack">
           {s.academics.map((item) => (
-            <div key={item.course}>
+            <div key={item.course} className="row">
               <div className="entry">
                 <span className="entry__primary">{item.course}</span>
                 <span className="entry__meta">{item.org} · {item.period}</span>

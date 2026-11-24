@@ -15,32 +15,79 @@ export const LINKS = {
   email: 'lnmelare@gmail.com',
 };
 
+/**
+ * Itens do menu, na ordem e com os nomes do menu de pausa do Persona 3.
+ * Os rótulos ficam em inglês nos dois idiomas, como no jogo; a descrição de cada
+ * item (a barra de ajuda no rodapé) vem de `copy.menu`.
+ */
 export const MENU_ITEMS = [
-  { id: 'status', label: 'STATUS' },
-  { id: 'skills', label: 'SKILLS' },
-  { id: 'quests', label: 'QUESTS' },
+  { id: 'status', label: 'STATS' },
+  { id: 'skills', label: 'PERSONA' },
+  { id: 'quests', label: 'QUEST' },
+  { id: 'social', label: 'SOCIAL LINK' },
   { id: 'system', label: 'SYSTEM' },
 ];
 
+/** Arcanos usados nas cartas, com o numeral romano do tarô. */
+export const ARCANA = {
+  fool: { num: '0', pt: 'LOUCO', en: 'FOOL' },
+  magician: { num: 'I', pt: 'MAGO', en: 'MAGICIAN' },
+  priestess: { num: 'II', pt: 'SACERDOTISA', en: 'PRIESTESS' },
+  empress: { num: 'III', pt: 'IMPERATRIZ', en: 'EMPRESS' },
+  emperor: { num: 'IV', pt: 'IMPERADOR', en: 'EMPEROR' },
+  hierophant: { num: 'V', pt: 'HIEROFANTE', en: 'HIEROPHANT' },
+  chariot: { num: 'VII', pt: 'CARRUAGEM', en: 'CHARIOT' },
+  hermit: { num: 'IX', pt: 'EREMITA', en: 'HERMIT' },
+  star: { num: 'XVII', pt: 'ESTRELA', en: 'STAR' },
+  sun: { num: 'XIX', pt: 'SOL', en: 'SUN' },
+};
+
 const pt = {
   htmlLang: 'pt-BR',
-  title: { name: 'LUCAS', subtitle: 'PORTFÓLIO', prompt: 'PRESSIONE PARA COMEÇAR' },
+  title: {
+    name: 'LUCAS MELARÉ',
+    subtitle: 'ANALISTA DE DADOS · PORTFÓLIO',
+    prompt: 'PRESSIONE QUALQUER TECLA',
+  },
   ui: {
-    back: '◄ VOLTAR AO MENU',
+    back: 'VOLTAR',
     menuLabel: 'Menu principal',
-    hint: 'Use ↑ ↓ para navegar e Enter para confirmar',
-    soundOn: 'Som ligado',
-    soundOff: 'Som desligado',
+    keys: { select: 'Selecionar', confirm: 'Confirmar', back: 'Voltar' },
+    bgm: 'Música',
+    se: 'Efeitos sonoros',
     langLabel: 'Mudar para inglês',
-    ambienceOn: 'Ambiente da Dark Hour ligado',
-    ambienceOff: 'Ambiente da Dark Hour desligado',
+    langShort: 'EN',
+    on: 'ON',
+    off: 'OFF',
+  },
+  menu: {
+    status: 'Ficha do personagem: cargo atual, histórico e formação.',
+    skills: 'Compêndio de habilidades técnicas e ferramentas de apoio.',
+    quests: 'Pedidos aceitos: projetos entregues e em andamento.',
+    social: 'Vínculos formados: LinkedIn, GitHub e e-mail.',
+    system: 'Baixar o currículo e ajustar idioma, música e efeitos.',
+  },
+  calendar: {
+    phases: {
+      'early-morning': 'MADRUGADA',
+      morning: 'MANHÃ',
+      lunchtime: 'ALMOÇO',
+      afternoon: 'TARDE',
+      'after-school': 'PÓS-AULA',
+      evening: 'NOITE',
+      'late-night': 'TARDE DA NOITE',
+      'dark-hour': 'DARK HOUR',
+    },
+    moon: ['Lua nova', 'Lua crescente', 'Quarto crescente', 'Crescente gibosa', 'Lua cheia', 'Minguante gibosa', 'Quarto minguante', 'Lua minguante'],
   },
   status: {
     name: 'LUCAS N. MELARÉ COELHO',
-    class: 'Classe: Analista de Dados · Analytics Engineer · Analista de BI',
+    arcana: 'fool',
+    arcanaNote: 'Wild Card',
+    class: 'Analista de Dados · Analytics Engineer · Analista de BI',
     location: 'Sorocaba, SP · Brasil',
     bio: 'Analista de dados com atuação diária em SQL avançado, Python e Power BI, responsável pela integridade e pela qualidade dos dados de uma plataforma de gestão de inspeções de turbinas eólicas. Experiência prática em ETL, modelagem de dados, automação de rotinas de banco e validação de qualidade de dados em produção.',
-    guildLabel: 'GUILDA ATUAL',
+    guildLabel: 'ATUALMENTE',
     historyLabel: 'HISTÓRICO',
     academicsLabel: 'FORMAÇÃO',
     languagesLabel: 'IDIOMAS',
@@ -66,15 +113,16 @@ const pt = {
     languages: 'Português (nativo) · Inglês (avançado)',
   },
   skills: {
-    partyLabel: 'PARTY PRINCIPAL',
-    arsenalLabel: 'ARSENAL',
+    partyLabel: 'COMPÊNDIO',
+    arsenalLabel: 'HABILIDADES DE APOIO',
+    nextLabel: 'NEXT',
     party: [
-      { id: 'sql', name: 'SQL AVANÇADO', level: 48, hp: 92, sp: 85, tag: 'Joins · CTEs · Agregações' },
-      { id: 'python', name: 'PYTHON / PANDAS', level: 44, hp: 88, sp: 80, tag: 'ETL · Análise exploratória' },
-      { id: 'powerbi', name: 'POWER BI / DAX', level: 42, hp: 85, sp: 82, tag: 'Dashboards · KPIs' },
-      { id: 'etl', name: 'ENGENHARIA ANALÍTICA', level: 40, hp: 82, sp: 78, tag: 'Medallion · Modelagem' },
-      { id: 'ts', name: 'TYPESCRIPT / REACT', level: 38, hp: 78, sp: 70, tag: 'NestJS · Next.js · APIs' },
-      { id: 'spark', name: 'PYSPARK / DATABRICKS', level: 34, hp: 70, sp: 75, tag: 'Delta Lake · Em evolução' },
+      { id: 'sql', arcana: 'magician', name: 'SQL AVANÇADO', level: 48, exp: 85, tag: 'Joins · CTEs · Agregações' },
+      { id: 'python', arcana: 'priestess', name: 'PYTHON / PANDAS', level: 44, exp: 80, tag: 'ETL · Análise exploratória' },
+      { id: 'powerbi', arcana: 'empress', name: 'POWER BI / DAX', level: 42, exp: 82, tag: 'Dashboards · KPIs' },
+      { id: 'etl', arcana: 'chariot', name: 'ENGENHARIA ANALÍTICA', level: 40, exp: 78, tag: 'Medallion · Modelagem' },
+      { id: 'ts', arcana: 'emperor', name: 'TYPESCRIPT / REACT', level: 38, exp: 70, tag: 'NestJS · Next.js · APIs' },
+      { id: 'spark', arcana: 'star', name: 'PYSPARK / DATABRICKS', level: 34, exp: 75, tag: 'Delta Lake · Em evolução' },
     ],
     arsenal: [
       'AWS (S3, Glue, Athena)', 'MySQL', 'Delta Lake', 'NumPy', 'Streamlit',
@@ -83,9 +131,9 @@ const pt = {
     ],
   },
   quests: {
-    statusLabels: { active: 'EM ANDAMENTO', cleared: 'CONCLUÍDA' },
-    rewardLabel: 'RECOMPENSA / TECH',
-    clientLabel: 'Cliente',
+    statusLabels: { active: 'EM ANDAMENTO', cleared: 'CONCLUÍDO' },
+    rewardLabel: 'RECOMPENSA',
+    clientLabel: 'Solicitante',
     list: [
       {
         id: 'arthnex',
@@ -94,6 +142,14 @@ const pt = {
         state: 'active',
         techs: 'SQL • TypeScript • NestJS',
         desc: 'Integridade e qualidade dos dados da plataforma de inspeção de pás de turbinas eólicas: investigação de inconsistências, correção de registros em produção e validação de qualidade antes de cada release.',
+      },
+      {
+        id: 'cpx-call',
+        title: 'CPX Call',
+        client: 'Projeto open source',
+        state: 'active',
+        techs: 'Rust • Axum • WebRTC • Tauri • Fly.io',
+        desc: 'App de chamadas para jogar junto, sem conta: compartilhamento de tela com som, voz, câmera e chat direto entre os navegadores (WebRTC). Servidor de sinalização em Rust que não guarda nada, app para Windows em Tauri e codificação por hardware quando disponível.',
       },
       {
         id: 'medallion',
@@ -137,35 +193,71 @@ const pt = {
       },
     ],
   },
+  social: {
+    rankLabel: 'RANK',
+    links: {
+      linkedin: { arcana: 'hierophant', name: 'LinkedIn', sub: 'Carreira e recomendações' },
+      github: { arcana: 'hermit', name: 'GitHub', sub: 'Código e projetos' },
+      email: { arcana: 'sun', name: 'E-mail', sub: 'Fale comigo diretamente' },
+    },
+  },
   system: {
-    saveDataPt: { label: 'SAVE DATA', sub: 'Baixar currículo (PT)' },
-    saveDataEn: { label: 'SAVE DATA', sub: 'Download resume (EN)' },
-    network: { label: 'NETWORK', sub: 'LinkedIn' },
-    source: { label: 'SOURCE', sub: 'GitHub' },
-    comms: { label: 'COMMS', sub: 'E-mail' },
+    saveLabel: 'SAVE DATA',
+    configLabel: 'CONFIG',
+    savePt: { label: 'SAVE DATA 01', sub: 'Currículo · Português (PDF)' },
+    saveEn: { label: 'SAVE DATA 02', sub: 'Resume · English (PDF)' },
+    language: 'Idioma',
+    languageValue: 'PORTUGUÊS',
   },
 };
 
 const en = {
   htmlLang: 'en',
-  title: { name: 'LUCAS', subtitle: 'PORTFOLIO', prompt: 'PRESS TO START' },
+  title: {
+    name: 'LUCAS MELARÉ',
+    subtitle: 'DATA ANALYST · PORTFOLIO',
+    prompt: 'PRESS ANY BUTTON',
+  },
   ui: {
-    back: '◄ BACK TO MENU',
+    back: 'BACK',
     menuLabel: 'Main menu',
-    hint: 'Use ↑ ↓ to navigate and Enter to confirm',
-    soundOn: 'Sound on',
-    soundOff: 'Sound off',
+    keys: { select: 'Select', confirm: 'Confirm', back: 'Back' },
+    bgm: 'Music',
+    se: 'Sound effects',
     langLabel: 'Switch to Portuguese',
-    ambienceOn: 'Dark Hour ambience on',
-    ambienceOff: 'Dark Hour ambience off',
+    langShort: 'PT',
+    on: 'ON',
+    off: 'OFF',
+  },
+  menu: {
+    status: 'Character sheet: current role, history and education.',
+    skills: 'Compendium of technical skills and supporting tools.',
+    quests: 'Accepted requests: shipped and ongoing projects.',
+    social: 'Bonds formed: LinkedIn, GitHub and e-mail.',
+    system: 'Download the resume and adjust language, music and sound.',
+  },
+  calendar: {
+    phases: {
+      'early-morning': 'EARLY MORNING',
+      morning: 'MORNING',
+      lunchtime: 'LUNCHTIME',
+      afternoon: 'AFTERNOON',
+      'after-school': 'AFTER SCHOOL',
+      evening: 'EVENING',
+      'late-night': 'LATE NIGHT',
+      'dark-hour': 'DARK HOUR',
+    },
+    moon: ['New moon', 'Waxing crescent', 'First quarter', 'Waxing gibbous', 'Full moon', 'Waning gibbous', 'Last quarter', 'Waning crescent'],
   },
   status: {
     name: 'LUCAS N. MELARÉ COELHO',
-    class: 'Class: Data Analyst · Analytics Engineer · BI Analyst',
+    arcana: 'fool',
+    arcanaNote: 'Wild Card',
+    class: 'Data Analyst · Analytics Engineer · BI Analyst',
     location: 'Sorocaba, SP · Brazil',
     bio: 'Data analyst working daily with advanced SQL, Python and Power BI, accountable for data integrity and data quality on a wind turbine blade inspection platform. Hands-on with ETL, data modeling, database automation and production data quality validation.',
-    guildLabel: 'CURRENT GUILD',
-    historyLabel: 'PREVIOUS RUNS',
+    guildLabel: 'CURRENTLY',
+    historyLabel: 'HISTORY',
     academicsLabel: 'EDUCATION',
     languagesLabel: 'LANGUAGES',
     guild: {
@@ -190,15 +282,16 @@ const en = {
     languages: 'Portuguese (native) · English (advanced)',
   },
   skills: {
-    partyLabel: 'MAIN PARTY',
-    arsenalLabel: 'ARSENAL',
+    partyLabel: 'COMPENDIUM',
+    arsenalLabel: 'SUPPORT SKILLS',
+    nextLabel: 'NEXT',
     party: [
-      { id: 'sql', name: 'ADVANCED SQL', level: 48, hp: 92, sp: 85, tag: 'Joins · CTEs · Aggregations' },
-      { id: 'python', name: 'PYTHON / PANDAS', level: 44, hp: 88, sp: 80, tag: 'ETL · Exploratory analysis' },
-      { id: 'powerbi', name: 'POWER BI / DAX', level: 42, hp: 85, sp: 82, tag: 'Dashboards · KPIs' },
-      { id: 'etl', name: 'ANALYTICS ENGINEERING', level: 40, hp: 82, sp: 78, tag: 'Medallion · Data modeling' },
-      { id: 'ts', name: 'TYPESCRIPT / REACT', level: 38, hp: 78, sp: 70, tag: 'NestJS · Next.js · APIs' },
-      { id: 'spark', name: 'PYSPARK / DATABRICKS', level: 34, hp: 70, sp: 75, tag: 'Delta Lake · Levelling up' },
+      { id: 'sql', arcana: 'magician', name: 'ADVANCED SQL', level: 48, exp: 85, tag: 'Joins · CTEs · Aggregations' },
+      { id: 'python', arcana: 'priestess', name: 'PYTHON / PANDAS', level: 44, exp: 80, tag: 'ETL · Exploratory analysis' },
+      { id: 'powerbi', arcana: 'empress', name: 'POWER BI / DAX', level: 42, exp: 82, tag: 'Dashboards · KPIs' },
+      { id: 'etl', arcana: 'chariot', name: 'ANALYTICS ENGINEERING', level: 40, exp: 78, tag: 'Medallion · Data modeling' },
+      { id: 'ts', arcana: 'emperor', name: 'TYPESCRIPT / REACT', level: 38, exp: 70, tag: 'NestJS · Next.js · APIs' },
+      { id: 'spark', arcana: 'star', name: 'PYSPARK / DATABRICKS', level: 34, exp: 75, tag: 'Delta Lake · Levelling up' },
     ],
     arsenal: [
       'AWS (S3, Glue, Athena)', 'MySQL', 'Delta Lake', 'NumPy', 'Streamlit',
@@ -208,8 +301,8 @@ const en = {
   },
   quests: {
     statusLabels: { active: 'IN PROGRESS', cleared: 'CLEARED' },
-    rewardLabel: 'REWARD / TECH',
-    clientLabel: 'Client',
+    rewardLabel: 'REWARD',
+    clientLabel: 'Requested by',
     list: [
       {
         id: 'arthnex',
@@ -218,6 +311,14 @@ const en = {
         state: 'active',
         techs: 'SQL • TypeScript • NestJS',
         desc: 'Data integrity and quality on the wind turbine blade inspection platform: investigating inconsistencies, correcting production records and validating data quality ahead of each release.',
+      },
+      {
+        id: 'cpx-call',
+        title: 'CPX Call',
+        client: 'Open source project',
+        state: 'active',
+        techs: 'Rust • Axum • WebRTC • Tauri • Fly.io',
+        desc: 'Account-free calling app for playing together: screen sharing with audio, voice, camera and chat sent peer-to-peer between browsers (WebRTC). Stateless Rust signaling server that stores nothing, a Windows app built with Tauri and hardware encoding when available.',
       },
       {
         id: 'medallion',
@@ -261,12 +362,21 @@ const en = {
       },
     ],
   },
+  social: {
+    rankLabel: 'RANK',
+    links: {
+      linkedin: { arcana: 'hierophant', name: 'LinkedIn', sub: 'Career and recommendations' },
+      github: { arcana: 'hermit', name: 'GitHub', sub: 'Code and projects' },
+      email: { arcana: 'sun', name: 'E-mail', sub: 'Reach me directly' },
+    },
+  },
   system: {
-    saveDataPt: { label: 'SAVE DATA', sub: 'Baixar currículo (PT)' },
-    saveDataEn: { label: 'SAVE DATA', sub: 'Download resume (EN)' },
-    network: { label: 'NETWORK', sub: 'LinkedIn' },
-    source: { label: 'SOURCE', sub: 'GitHub' },
-    comms: { label: 'COMMS', sub: 'E-mail' },
+    saveLabel: 'SAVE DATA',
+    configLabel: 'CONFIG',
+    savePt: { label: 'SAVE DATA 01', sub: 'Currículo · Português (PDF)' },
+    saveEn: { label: 'SAVE DATA 02', sub: 'Resume · English (PDF)' },
+    language: 'Language',
+    languageValue: 'ENGLISH',
   },
 };
 

@@ -1,64 +1,63 @@
 import { motion } from 'framer-motion';
+import ArcanaCard from '../ArcanaCard';
 
-/** Barra de HP/SP que cresce de 0 até o valor da skill. */
-function Gauge({ kind, value, animate }) {
-  return (
-    <div className={`gauge gauge--${kind}`}>
-      <span className="gauge__label">{kind.toUpperCase()}</span>
-      <div
-        className="gauge__track"
-        role="meter"
-        aria-valuenow={value}
-        aria-valuemin={0}
-        aria-valuemax={100}
-        aria-label={kind.toUpperCase()}
-      >
-        <motion.div
-          className="gauge__fill"
-          initial={animate ? { width: 0 } : false}
-          animate={{ width: `${value}%` }}
-          transition={{ duration: 0.8, ease: 'easeOut' }}
-        />
-      </div>
-    </div>
-  );
-}
-
-/** Aba SKILLS: as tecnologias principais como uma "party", mais o arsenal de apoio. */
+/**
+ * Aba PERSONA: as tecnologias principais como entradas do compêndio — Arcano, nome,
+ * nível e a barra de experiência até o próximo nível —, mais as habilidades de apoio.
+ */
 export default function SkillsSection({ copy, reducedMotion }) {
   const s = copy.skills;
+  const lang = copy.htmlLang === 'en' ? 'en' : 'pt';
 
   return (
     <div className="scroll-area">
       <section>
         <h4 className="section-label">{s.partyLabel}</h4>
-        <div className="stack">
+        <ol className="compendium">
           {s.party.map((skill, index) => (
-            <motion.article
+            <motion.li
               key={skill.id}
-              className="skill-card"
-              initial={reducedMotion ? false : { opacity: 0, x: 40 }}
+              className="persona"
+              initial={reducedMotion ? false : { opacity: 0, x: 30 }}
               animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: index * 0.08 }}
+              transition={{ delay: index * 0.05, duration: 0.25 }}
             >
-              <div className="skill-card__sigil" aria-hidden="true">{skill.name.charAt(0)}</div>
-              <div className="skill-card__body">
-                <div className="skill-card__head">
-                  <h5 className="skill-card__name">{skill.name}</h5>
-                  <span className="skill-card__level">Lv {skill.level}</span>
+              <ArcanaCard arcana={skill.arcana} lang={lang} />
+              <div className="persona__body">
+                <div className="persona__head">
+                  <h5 className="persona__name">{skill.name}</h5>
+                  <span className="persona__level">
+                    <small>Lv</small>{skill.level}
+                  </span>
                 </div>
-                <p className="skill-card__tag">{skill.tag}</p>
-                <Gauge kind="hp" value={skill.hp} animate={!reducedMotion} />
-                <Gauge kind="sp" value={skill.sp} animate={!reducedMotion} />
+                <p className="persona__tag">{skill.tag}</p>
+                <div className="exp">
+                  <span className="exp__label">{s.nextLabel}</span>
+                  <div
+                    className="exp__track"
+                    role="meter"
+                    aria-valuenow={skill.exp}
+                    aria-valuemin={0}
+                    aria-valuemax={100}
+                    aria-label={`${skill.name} — ${s.nextLabel}`}
+                  >
+                    <motion.div
+                      className="exp__fill"
+                      initial={reducedMotion ? false : { width: 0 }}
+                      animate={{ width: `${skill.exp}%` }}
+                      transition={{ delay: 0.15 + index * 0.05, duration: 0.7, ease: 'easeOut' }}
+                    />
+                  </div>
+                </div>
               </div>
-            </motion.article>
+            </motion.li>
           ))}
-        </div>
+        </ol>
       </section>
 
       <section>
         <h4 className="section-label">{s.arsenalLabel}</h4>
-        <ul className="arsenal">
+        <ul className="skill-list">
           {s.arsenal.map((tool) => <li key={tool}>{tool}</li>)}
         </ul>
       </section>
