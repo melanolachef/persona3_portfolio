@@ -27,18 +27,20 @@ const BUBBLES = [
 export default function Backdrop({ started, reducedMotion }) {
   return (
     <div className="sea" aria-hidden="true">
-      <div className="sea__caustics" />
-      <div className="sea__caustics sea__caustics--back" />
-      <div className="sea__rays" />
+      {/* A água fica numa camada própria para o filtro da Dark Hour não tingir a lua. */}
+      <div className="sea__water">
+        <div className="sea__caustics" />
+        <div className="sea__caustics sea__caustics--back" />
+        <div className="sea__rays" />
+      </div>
 
-      {started && (
-        <motion.div
-          className="moon"
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 2, ease: 'easeOut' }}
-        />
-      )}
+      {/* A lua já está lá na capa e continua no menu; ao começar, recua um pouco. */}
+      <motion.div
+        className={`moon${started ? '' : ' moon--title'}`}
+        initial={reducedMotion ? false : { opacity: 0, scale: 0.9 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 2, ease: 'easeOut' }}
+      />
 
       {!reducedMotion && (
         <div className="sea__bubbles">

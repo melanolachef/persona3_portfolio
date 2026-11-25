@@ -47,7 +47,7 @@ const pt = {
   title: {
     name: 'LUCAS MELARÉ',
     subtitle: 'ANALISTA DE DADOS · PORTFÓLIO',
-    prompt: 'PRESSIONE QUALQUER TECLA',
+    prompt: ['PRESSIONE', 'QUALQUER', 'TECLA'],
   },
   ui: {
     back: 'VOLTAR',
@@ -216,7 +216,7 @@ const en = {
   title: {
     name: 'LUCAS MELARÉ',
     subtitle: 'DATA ANALYST · PORTFOLIO',
-    prompt: 'PRESS ANY BUTTON',
+    prompt: ['PRESS', 'ANY', 'BUTTON'],
   },
   ui: {
     back: 'BACK',
