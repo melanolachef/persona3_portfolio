@@ -142,7 +142,7 @@ export default function App() {
             className={`layout${activeSection ? ' layout--open' : ''}`}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ duration: 0.4, delay: reducedMotion ? 0 : 0.25 }}
+            transition={{ duration: 0.5 }}
           >
             <Hud copy={copy} now={now} lang={lang} settings={settings} onHover={sfx.hover} />
 
@@ -174,17 +174,6 @@ export default function App() {
           </motion.div>
         )}
       </AnimatePresence>
-
-      {/* Faixa diagonal que varre a tela ao entrar no menu, como a transição do jogo. */}
-      {gameStarted && !reducedMotion && (
-        <motion.div
-          className="wipe"
-          aria-hidden="true"
-          initial={{ x: '-130%' }}
-          animate={{ x: '130%' }}
-          transition={{ duration: 0.75, ease: [0.7, 0, 0.3, 1] }}
-        />
-      )}
 
       <div className="backdrop-vignette" aria-hidden="true" />
     </div>

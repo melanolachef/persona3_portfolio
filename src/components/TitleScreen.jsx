@@ -1,4 +1,5 @@
 import { motion } from 'framer-motion';
+import { CAMERA_EASE } from '../lib/camera';
 
 const EASE = [0.7, 0, 0.3, 1];
 
@@ -26,8 +27,9 @@ export default function TitleScreen({ copy, onStart, reducedMotion }) {
       type="button"
       className="title-screen"
       onClick={onStart}
-      exit={reducedMotion ? { opacity: 0 } : { opacity: 0, x: -40, filter: 'blur(6px)' }}
-      transition={{ duration: 0.5, ease: 'easeInOut' }}
+      // Sai junto com a câmera: recua com o zoom out e escorrega para a direita com o giro.
+      exit={reducedMotion ? { opacity: 0 } : { opacity: 0, scale: 0.85, x: '12vw', filter: 'blur(4px)' }}
+      transition={{ duration: 0.55, ease: CAMERA_EASE }}
     >
       <span className="title-screen__logo">
         <motion.span className="title-screen__heading" {...enter(0.25)}>

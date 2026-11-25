@@ -1,4 +1,5 @@
 import { motion } from 'framer-motion';
+import { CAMERA, CAMERA_DURATION, CAMERA_EASE } from '../lib/camera';
 
 /**
  * Fundo do menu: o "mar" azul do Persona 3 — gradiente profundo, reflexos de água
@@ -27,6 +28,12 @@ const BUBBLES = [
 export default function Backdrop({ started, reducedMotion }) {
   return (
     <div className="sea" aria-hidden="true">
+      <motion.div
+        className="sea__scene"
+        initial={false}
+        animate={started ? CAMERA.menu : CAMERA.title}
+        transition={reducedMotion ? { duration: 0 } : { duration: CAMERA_DURATION, ease: CAMERA_EASE }}
+      >
       {/* A água fica numa camada própria para o filtro da Dark Hour não tingir a lua. */}
       <div className="sea__water">
         <div className="sea__caustics" />
@@ -59,6 +66,7 @@ export default function Backdrop({ started, reducedMotion }) {
           ))}
         </div>
       )}
+      </motion.div>
     </div>
   );
 }
