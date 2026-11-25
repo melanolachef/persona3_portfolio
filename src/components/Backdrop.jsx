@@ -1,4 +1,5 @@
 import { motion } from 'framer-motion';
+import { CAMERA, CAMERA_DURATION, CAMERA_EASE } from '../lib/camera';
 
 /**
  * Fundo do menu: o "mar" azul do Persona 3 — gradiente profundo, reflexos de água
@@ -27,18 +28,26 @@ const BUBBLES = [
 export default function Backdrop({ started, reducedMotion }) {
   return (
     <div className="sea" aria-hidden="true">
-      <div className="sea__caustics" />
-      <div className="sea__caustics sea__caustics--back" />
-      <div className="sea__rays" />
+      <motion.div
+        className="sea__scene"
+        initial={false}
+        animate={started ? CAMERA.menu : CAMERA.title}
+        transition={reducedMotion ? { duration: 0 } : { duration: CAMERA_DURATION, ease: CAMERA_EASE }}
+      >
+      {/* A água fica numa camada própria para o filtro da Dark Hour não tingir a lua. */}
+      <div className="sea__water">
+        <div className="sea__caustics" />
+        <div className="sea__caustics sea__caustics--back" />
+        <div className="sea__rays" />
+      </div>
 
-      {started && (
-        <motion.div
-          className="moon"
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 2, ease: 'easeOut' }}
-        />
-      )}
+      {/* A lua já está lá na capa e continua no menu; ao começar, recua um pouco. */}
+      <motion.div
+        className={`moon${started ? '' : ' moon--title'}`}
+        initial={reducedMotion ? false : { opacity: 0, scale: 0.9 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 2, ease: 'easeOut' }}
+      />
 
       {!reducedMotion && (
         <div className="sea__bubbles">
@@ -57,6 +66,7 @@ export default function Backdrop({ started, reducedMotion }) {
           ))}
         </div>
       )}
+      </motion.div>
     </div>
   );
 }
